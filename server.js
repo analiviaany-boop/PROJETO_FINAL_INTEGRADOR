@@ -140,7 +140,7 @@ app.get('/api/v1/emprestimos', (req, res) => {
 app.get('/api/v1/emprestimos/:id', (req, res) => {
 	const id = Number(req.params.id);
 
-	const emprestimos = emprestimos.find(e => e.id === id);
+	const emprestimo = emprestimos.find(e => e.id === id);
 
 	if (!emprestimo) {
 		return res.status(404).json({
@@ -177,7 +177,7 @@ app.post('/api/v1/emprestimos', (req, res) => {
 	}
 
 	// Procura o livro pelo ID informado
-	const livro = livros.find(l => l.id === Number(livroID));
+	const livro = livros.find(l => l.id === Number(livroId));
 
 	// Verifica se o livro existe
 	if (livro.status !== "DISPONIVEL") {
@@ -185,6 +185,186 @@ app.post('/api/v1/emprestimos', (req, res) => {
 			erro: "Este livro nao esta disponivel para emprestimo."
 		});
 	}
+	// Valida a data de devolução
+    const dataPrevista = new Date(dataDevolucaoPrevista);
+
+    if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(dataDevolucaoPrevista) ||
+        isNaN(dataPrevista.getTime()) ||
+        dataPrevista.toISOString().slice(0, 10) !== dataDevolucaoPrevista
+    ) {
+        return res.status(400).json({
+            erro: "Data de devolucao invalida. Utilize YYYY-MM-DD."
+        });
+    }
+
+    const hoje = new Date().toISOString().slice(0, 10);
+
+    if (dataDevolucaoPrevista < hoje) {
+        return res.status(400).json({
+            erro: "A data de devolucao nao pode estar no passado."
+        });
+    }
+
+    // Gera o próximo ID
+    const novoId = emprestimos.length > 0
+        ? Math.max(...emprestimos.map(e => e.id)) + 1
+        : 1;
+
+    // Cria o empréstimo
+    const novoEmprestimo = {
+        id: novoId,
+        livroId: livro.id,
+        nomeUsuario: nomeUsuario.trim(),
+        dataEmprestimo: new Date(),
+        dataDevolucaoPrevista,
+        dataDevolucao: null,
+        status: "ATIVO"
+    };
+
+    if (!novoEmprestimo.nomeUsuario) {
+        return res.status(400).json({
+            erro: "O nome do usuario e obrigatorio."
+        });
+    }
+
+    emprestimos.push(novoEmprestimo);
+
+    // Atualiza a disponibilidade do livro
+    livro.status = "EMPRESTADO";
+
+    res.status(201).json({
+        mensagem: "Emprestimo cadastrado com sucesso!",
+        emprestimo: novoEmprestimo,
+        livro
+    });
+});
+
+
+// 11. PUT /api/v1/emprestimos/:id - Atualizar empréstimo
+app.put('/api/v1/emprestimos/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    const emprestimo = emprestimos.find(e => e.id === id);
+
+    if (!emprestimo) {
+        return res.status(404).json({
+            erro: "Emprestimo nao encontrado."
+        });
+    }
+
+    if (emprestimo.status === "DEVOLVIDO") {
+        return res.status(400).json({
+            erro: "Nao e possivel atualizar um emprestimo devolvido."
+        });
+    }
+
+    const { nomeUsuario, dataDevolucaoPrevista } = req.body;
+
+    if (!nomeUsuario || !dataDevolucaoPrevista) {
+        return res.status(400).json({
+            erro: "Informe nomeUsuario e dataDevolucaoPrevista."
+        });
+    }
+
+    const dataPrevista = new Date(dataDevolucaoPrevista);
+
+    if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(dataDevolucaoPrevista) ||
+        isNaN(dataPrevista.getTime()) ||
+        dataPrevista.toISOString().slice(0, 10) !== dataDevolucaoPrevista
+    ) {
+        return res.status(400).json({
+            erro: "Data de devolucao invalida. Utilize YYYY-MM-DD."
+        });
+    }
+
+    if (dataDevolucaoPrevista < new Date().toISOString().slice(0, 10)) {
+        return res.status(400).json({
+            erro: "A data de devolucao nao pode estar no passado."
+        });
+    }
+
+    emprestimo.nomeUsuario = nomeUsuario.trim();
+
+    if (!emprestimo.nomeUsuario) {
+        return res.status(400).json({
+            erro: "O nome do usuario e obrigatorio."
+        });
+    }
+
+    emprestimo.dataDevolucaoPrevista = dataDevolucaoPrevista;
+
+    res.status(200).json({
+        mensagem: "Emprestimo atualizado com sucesso!",
+        emprestimo
+    });
+});
+
+
+// 12. PATCH /api/v1/emprestimos/:id/devolucao - Registrar devolução
+app.patch('/api/v1/emprestimos/:id/devolucao', (req, res) => {
+    const id = Number(req.params.id);
+
+    const emprestimo = emprestimos.find(e => e.id === id);
+
+    if (!emprestimo) {
+        return res.status(404).json({
+            erro: "Emprestimo nao encontrado."
+        });
+    }
+
+    if (emprestimo.status === "DEVOLVIDO") {
+        return res.status(400).json({
+            erro: "Este livro ja foi devolvido."
+        });
+    }
+
+    // Registra a data da devolução
+    emprestimo.dataDevolucao = new Date();
+
+    emprestimo.status = "DEVOLVIDO";
+
+    // Procura o livro relacionado pelo livroId
+    const livro = livros.find(l => l.id === emprestimo.livroId);
+
+    if (livro) {
+        livro.status = "DISPONIVEL";
+    }
+
+    res.status(200).json({
+        mensagem: "Devolucao registrada com sucesso!",
+        emprestimo,
+        livro: livro || null
+    });
+});
+
+
+// 13. DELETE /api/v1/emprestimos/:id - Excluir empréstimo
+app.delete('/api/v1/emprestimos/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    const index = emprestimos.findIndex(e => e.id === id);
+
+    if (index === -1) {
+        return res.status(404).json({
+            erro: "Emprestimo nao encontrado."
+        });
+    }
+
+    if (emprestimos[index].status !== "DEVOLVIDO") {
+        return res.status(400).json({
+            erro: "So e possivel excluir emprestimos devolvidos."
+        });
+    }
+
+    emprestimos.splice(index, 1);
+
+    res.status(200).json({
+        mensagem: "Emprestimo excluido com sucesso!"
+    });
+});
+
 app.listen(PORT, () => {
 	console.log(`[BIBLIOTECH] API de Gestão de Biblioteca rodando em http://localhost:${PORT}`);
 });
