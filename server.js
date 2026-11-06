@@ -34,7 +34,7 @@ app.get('/api/v1/livros/:id', (req, res) => {
 
 // 3. GET /api/v1/health - Mostrar o status da API
 app.get('/api/v1/health', (req, res) => {
-	res.status(200).json({ status: "ONLINE", application: "BINARIO TECH API V1.1", uptime: process.uptime(), memory: process.memoryUsage() });
+	res.status(200).json({ status: "ONLINE", application: "BIBLIOTECH API V1.0", uptime: process.uptime(), memory: process.memoryUsage() });
 });
 
 // 4. POST /api/v1/livros - Cadastrar novo livro (Criacao)
@@ -110,5 +110,5 @@ app.put('/api/v1/livros/:id', (req, res) => {
 });
 
 app.listen(PORT, () => {
-	console.log(`API de Gestão de Biblioteca rodando em http://localhost:${PORT}`);
+	console.log(`[BIBLIOTECH] API de Gestão de Biblioteca rodando em http://localhost:${PORT}`);
 });
