@@ -1,115 +1,147 @@
-# 📚 Projeto Final Integrador — API de Gestão de Biblioteca
 
-API REST desenvolvida em **Node.js** com **Express** para gerenciar o acervo de uma biblioteca. O projeto permite cadastrar, consultar, atualizar e remover livros, além de disponibilizar uma rota para verificar o estado de funcionamento da API.
+# 📚 Projeto Final Integrador — BiblioTech API
+
+API REST desenvolvida em **Node.js** com **Express** para gerenciamento de uma biblioteca. O sistema permite administrar o acervo de livros e controlar os empréstimos e devoluções realizados pelos usuários.
 
 ## 🎯 Objetivo
 
-O objetivo do projeto é disponibilizar uma API simples para operações de gerenciamento de livros, utilizando os principais métodos HTTP e o padrão CRUD:
+O objetivo do projeto é desenvolver uma API para gerenciamento de biblioteca, aplicando os conceitos de desenvolvimento de software, arquitetura REST e operações CRUD.
 
-- **Create:** cadastrar livros;
-- **Read:** consultar livros e listar o acervo;
-- **Update:** atualizar os dados ou o status de um livro;
-- **Delete:** remover livros do acervo.
+O sistema possui duas entidades principais:
+
+- **Livros:** gerenciamento do acervo da biblioteca.
+- **Empréstimos:** controle dos empréstimos, prazos de devolução e disponibilidade dos livros.
 
 ## 🛠️ Tecnologias utilizadas
 
-- [Node.js](https://nodejs.org/) — ambiente de execução JavaScript;
-- [Express](https://expressjs.com/) — framework para criação das rotas HTTP;
-- [dotenv](https://www.npmjs.com/package/dotenv) — carregamento de variáveis de ambiente;
-- [Bash](https://www.gnu.org/software/bash/) — execução do script de testes automatizados;
-- [cURL](https://curl.se/) — envio de requisições HTTP durante os testes;
-- [jq](https://jqlang.github.io/jq/) — formatação e leitura das respostas JSON nos testes.
+- **Node.js:** ambiente de execução JavaScript.
+- **Express:** framework para criação da API REST.
+- **dotenv:** gerenciamento de variáveis de ambiente.
+- **Bash:** execução dos testes automatizados.
+- **cURL:** realização de requisições HTTP.
+- **jq:** leitura e formatação das respostas JSON.
+- **Git e GitHub:** versionamento e armazenamento do projeto.
 
 ## 📋 Funcionalidades
 
-- Listar todos os livros cadastrados;
-- Filtrar livros pelo status;
-- Buscar um livro específico pelo ID;
-- Cadastrar novos livros;
-- Atualizar integralmente os dados de um livro;
-- Alterar o status de um livro;
-- Remover livros do acervo;
-- Consultar o estado de funcionamento da API.
+### 📖 Gerenciamento de livros
 
-A API inicia com três livros de exemplo cadastrados.
+- Cadastrar novos livros.
+- Listar todos os livros.
+- Consultar livros pelo ID.
+- Filtrar livros pelo status.
+- Atualizar informações dos livros.
+- Alterar o status dos livros.
+- Excluir livros do acervo.
+
+### 📚 Gerenciamento de empréstimos
+
+- Cadastrar novos empréstimos.
+- Listar todos os empréstimos.
+- Consultar empréstimos pelo ID.
+- Atualizar informações dos empréstimos.
+- Registrar a devolução de livros.
+- Atualizar automaticamente a disponibilidade do livro após a devolução.
+- Identificar empréstimos atrasados.
+- Impedir empréstimos de livros indisponíveis.
+- Impedir a atualização de empréstimos já devolvidos.
+- Permitir a exclusão somente de empréstimos devolvidos.
+
+### ⚙️ Monitoramento da API
+
+- Verificar o funcionamento da aplicação.
+- Consultar o tempo de atividade do servidor.
+- Consultar informações de utilização da memória.
 
 ## 🚀 Como executar o projeto
 
 ### Pré-requisitos
 
-Antes de começar, instale:
+Antes de executar o projeto, é necessário instalar:
 
-- [Node.js e npm](https://nodejs.org/);
-- [Git](https://git-scm.com/) (opcional, para clonar o repositório).
+- [Node.js e npm](https://nodejs.org/)
+- [Git](https://git-scm.com/)
+- [jq](https://jqlang.github.io/jq/)
+- cURL
 
-### 1. Clone o repositório
+### 1. Clonar o repositório
 
 ```bash
 git clone https://github.com/analiviaany-boop/PROJETO_FINAL_INTEGRADOR.git
 ```
 
-### 2. Acesse a pasta do projeto
+### 2. Acessar a pasta do projeto
 
 ```bash
 cd PROJETO_FINAL_INTEGRADOR
 ```
 
-### 3. Instale as dependências
+### 3. Instalar as dependências
 
 ```bash
 npm install
 ```
 
-### 4. Inicie a API
+### 4. Iniciar o servidor
 
 ```bash
 node server.js
 ```
 
-Por padrão, a API ficará disponível em:
+Por padrão, a API estará disponível no endereço:
 
 ```text
 http://localhost:3004
 ```
 
-A porta pode ser alterada por meio da variável de ambiente `PORT`. O projeto também carrega configurações de um arquivo `.env`, caso ele seja utilizado.
+A porta pode ser alterada utilizando a variável de ambiente `PORT`.
+
+Exemplo:
+
+```bash
+PORT=3005 node server.js
+```
 
 ## 🔗 Endpoints disponíveis
 
-Todas as rotas da API utilizam o prefixo `/api/v1`.
+Todas as rotas utilizam o prefixo `/api/v1`.
+
+### 📖 Endpoints de Livros
 
 | Método | Endpoint | Descrição |
 |---|---|---|
-| `GET` | `/api/v1/livros` | Lista todos os livros |
-| `GET` | `/api/v1/livros?status=DISPONIVEL` | Filtra livros pelo status |
-| `GET` | `/api/v1/livros/:id` | Busca um livro pelo ID |
-| `POST` | `/api/v1/livros` | Cadastra um novo livro |
-| `PUT` | `/api/v1/livros/:id` | Substitui todos os dados de um livro |
-| `PATCH` | `/api/v1/livros/:id/status` | Atualiza o status de um livro |
-| `DELETE` | `/api/v1/livros/:id` | Remove um livro |
-| `GET` | `/api/v1/health` | Verifica o funcionamento da API |
+| GET | `/api/v1/livros` | Lista todos os livros |
+| GET | `/api/v1/livros?status=DISPONIVEL` | Filtra livros por status |
+| GET | `/api/v1/livros/:id` | Consulta um livro pelo ID |
+| POST | `/api/v1/livros` | Cadastra um novo livro |
+| PUT | `/api/v1/livros/:id` | Atualiza todos os dados de um livro |
+| PATCH | `/api/v1/livros/:id/status` | Atualiza o status de um livro |
+| DELETE | `/api/v1/livros/:id` | Remove um livro |
 
-### 📖 Estrutura de um livro
+### 📚 Endpoints de Empréstimos
 
-Os registros possuem os seguintes campos:
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/api/v1/emprestimos` | Lista todos os empréstimos |
+| GET | `/api/v1/emprestimos/:id` | Consulta um empréstimo pelo ID |
+| POST | `/api/v1/emprestimos` | Cadastra um novo empréstimo |
+| PUT | `/api/v1/emprestimos/:id` | Atualiza os dados de um empréstimo |
+| PATCH | `/api/v1/emprestimos/:id/devolucao` | Registra a devolução de um livro |
+| DELETE | `/api/v1/emprestimos/:id` | Exclui um empréstimo devolvido |
 
-```json
-{
-  "id": 1,
-  "livro": "O Pequeno Principe",
-  "autor": "Antoine de Saint-Exupery",
-  "editora": "Editora Rocco",
-  "status": "DISPONIVEL"
-}
-```
+### ❤️ Endpoint de monitoramento
 
-Os status utilizados nos registros iniciais são `DISPONIVEL`, `EMPRESTADO` e `ATRASADO`.
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/api/v1/health` | Verifica o funcionamento da API |
 
-### Exemplos de requisições
+## 📝 Exemplos de requisições
 
-**Cadastrar um livro — POST `/api/v1/livros`**
+### 1. Cadastrar um livro
 
-Envie um JSON com os campos `livro`, `autor` e `editora`:
+**POST** `/api/v1/livros`
+
+Corpo da requisição:
 
 ```json
 {
@@ -119,9 +151,64 @@ Envie um JSON com os campos `livro`, `autor` e `editora`:
 }
 ```
 
-O status inicial do novo livro será definido automaticamente como `DISPONIVEL`.
+O sistema gera automaticamente um ID e define o status inicial como `DISPONIVEL`.
 
-**Atualizar o status — PATCH `/api/v1/livros/:id/status`**
+### 2. Cadastrar um empréstimo
+
+**POST** `/api/v1/emprestimos`
+
+Corpo da requisição:
+
+```json
+{
+  "livroId": 1,
+  "nomeUsuario": "Ana Silva",
+  "dataDevolucaoPrevista": "2026-12-10"
+}
+```
+
+O sistema verifica se o livro existe, se está disponível e se a data de devolução é válida.
+
+Após o cadastro, o status do livro é alterado automaticamente para `EMPRESTADO`.
+
+### 3. Consultar empréstimos
+
+**GET** `/api/v1/emprestimos`
+
+Retorna os empréstimos cadastrados, incluindo os dados do livro relacionado.
+
+### 4. Atualizar um empréstimo
+
+**PUT** `/api/v1/emprestimos/:id`
+
+Corpo da requisição:
+
+```json
+{
+  "nomeUsuario": "Ana Silva Atualizado",
+  "dataDevolucaoPrevista": "2026-12-15"
+}
+```
+
+Não é permitido atualizar empréstimos que já foram devolvidos.
+
+### 5. Registrar devolução
+
+**PATCH** `/api/v1/emprestimos/:id/devolucao`
+
+Não é necessário enviar um corpo na requisição.
+
+Ao registrar a devolução:
+
+- A data de devolução é registrada automaticamente.
+- O status do empréstimo passa para `DEVOLVIDO`.
+- O status do livro relacionado volta para `DISPONIVEL`.
+
+### 6. Atualizar o status de um livro
+
+**PATCH** `/api/v1/livros/:id/status`
+
+Corpo da requisição:
 
 ```json
 {
@@ -129,76 +216,160 @@ O status inicial do novo livro será definido automaticamente como `DISPONIVEL`.
 }
 ```
 
-**Atualizar todos os dados — PUT `/api/v1/livros/:id`**
+## 📊 Regras de negócio
 
-```json
-{
-  "livro": "Dom Casmurro - Edição Especial",
-  "autor": "Machado de Assis",
-  "editora": "Livraria Garnier",
-  "status": "EMPRESTADO"
-}
-```
+O sistema possui regras para garantir o funcionamento correto do gerenciamento da biblioteca.
+
+1. Todo livro cadastrado recebe inicialmente o status `DISPONIVEL`.
+2. Somente livros disponíveis podem ser emprestados.
+3. Um empréstimo deve possuir um livro, um usuário e uma data prevista de devolução.
+4. A data de devolução não pode ser anterior à data atual.
+5. Ao cadastrar um empréstimo, o livro passa automaticamente para `EMPRESTADO`.
+6. Empréstimos com prazo ultrapassado são identificados como `ATRASADO`.
+7. Ao registrar uma devolução, o empréstimo passa para `DEVOLVIDO`.
+8. Após a devolução, o livro volta automaticamente para `DISPONIVEL`.
+9. Não é permitido registrar uma segunda devolução para o mesmo empréstimo.
+10. Não é permitido atualizar um empréstimo já devolvido.
+11. Somente empréstimos com status `DEVOLVIDO` podem ser excluídos.
+
+## 🏷️ Status utilizados
+
+### Status dos livros
+
+| Status | Descrição |
+|---|---|
+| `DISPONIVEL` | Livro disponível para empréstimo |
+| `EMPRESTADO` | Livro atualmente emprestado |
+| `ATRASADO` | Livro associado a uma situação de atraso |
+
+### Status dos empréstimos
+
+| Status | Descrição |
+|---|---|
+| `ATIVO` | Empréstimo em andamento |
+| `ATRASADO` | Empréstimo com prazo de devolução ultrapassado |
+| `DEVOLVIDO` | Livro devolvido à biblioteca |
 
 ## 🧪 Testes automatizados
 
-O repositório contém o script `testes_automacao.sh`, que executa uma sequência de operações para testar o CRUD da API:
+O projeto possui o arquivo `testes_automacao.sh`, desenvolvido em Bash, para realizar testes automatizados nas funcionalidades da API.
 
-1. Cadastra dois livros;
-2. Atualiza os dados de um dos livros;
-3. Remove o outro livro;
-4. Lista o acervo ao final dos testes.
+Os testes utilizam cURL para enviar requisições HTTP e jq para exibir as respostas em formato JSON.
 
-Para executar os testes, mantenha a API em funcionamento e abra outro terminal na pasta do projeto. O ambiente precisa ter **Bash**, **cURL** e **jq** instalados.
+### Testes realizados
+
+**Livros:**
+
+1. POST — Cadastrar livro.
+2. GET — Consultar livro cadastrado.
+3. PUT — Atualizar informações do livro.
+4. GET — Listar todos os livros.
+5. PATCH — Atualizar status do livro.
+
+**Empréstimos:**
+
+6. GET — Listar todos os empréstimos.
+7. POST — Cadastrar novo empréstimo.
+8. GET — Consultar empréstimo pelo ID.
+9. PUT — Atualizar informações do empréstimo.
+10. GET — Verificar status do livro emprestado.
+11. PATCH — Registrar devolução.
+12. GET — Consultar empréstimo após devolução.
+13. GET — Verificar disponibilidade do livro.
+14. PATCH — Testar bloqueio de devolução duplicada.
+15. DELETE — Excluir empréstimo devolvido.
+16. GET — Listar empréstimos após exclusão.
+
+**Finalização:**
+
+17. DELETE — Excluir livro de teste.
+18. GET — Listar acervo final de livros.
+
+### Como executar os testes
+
+Primeiramente, inicie o servidor:
+
+```bash
+node server.js
+```
+
+Abra outro terminal na pasta do projeto.
+
+Dê permissão de execução ao arquivo:
 
 ```bash
 chmod +x testes_automacao.sh
+```
+
+Execute os testes:
+
+```bash
 ./testes_automacao.sh
 ```
 
-Para utilizar outra porta, informe o número como argumento:
+Para utilizar outra porta:
 
 ```bash
 ./testes_automacao.sh 3005
 ```
 
-Nesse caso, inicie a API com a mesma porta, por exemplo:
+O script apresenta no terminal cada operação executada e as respostas JSON retornadas pela API.
 
-```bash
-PORT=3005 node server.js
-```
-
-> **Observação:** o script realiza operações diretamente na API em execução. Como os dados são armazenados em memória, as alterações são temporárias e são perdidas quando o servidor é reiniciado.
+> **Observação:** os testes realizam operações diretamente na API. Como os dados são armazenados em memória, as alterações realizadas são temporárias.
 
 ## 📁 Estrutura do projeto
 
 ```text
 PROJETO_FINAL_INTEGRADOR/
-├── server.js              # Servidor Express e implementação das rotas
-├── testes_automacao.sh    # Script de testes das operações CRUD
-├── package.json           # Metadados, dependências e configurações do projeto
-├── package-lock.json      # Registro das versões instaladas das dependências
-├── .gitignore             # Arquivos e pastas ignorados pelo Git
-└── README.md              # Documentação do projeto
+│
+├── server.js
+│   └── Servidor Express e implementação dos endpoints.
+│
+├── testes_automacao.sh
+│   └── Script de testes automatizados.
+│
+├── package.json
+│   └── Dependências e configurações do projeto.
+│
+├── package-lock.json
+│   └── Registro das versões das dependências.
+│
+├── .gitignore
+│   └── Arquivos e pastas ignorados pelo Git.
+│
+└── README.md
+    └── Documentação do projeto.
 ```
 
-## ⚠️ Observações
+## 💾 Armazenamento de dados
 
-- Os dados dos livros são armazenados em um array na memória do servidor; não há integração com banco de dados persistente nesta versão.
-- Ao reiniciar a aplicação, o acervo volta aos três registros iniciais.
-- A rota de cadastro exige os campos `livro`, `autor` e `editora`.
-- A atualização via `PUT` exige os campos `livro`, `autor`, `editora` e `status`.
-- A rota de saúde informa o status da aplicação, o tempo de atividade e dados de uso de memória.
+Nesta versão, os dados são armazenados em estruturas de arrays diretamente na memória do servidor.
+
+Existem duas estruturas principais:
+
+- `livros`: armazena os dados dos livros cadastrados.
+- `emprestimos`: armazena os dados dos empréstimos realizados.
+
+O relacionamento entre as entidades é realizado pelo campo `livroId`, presente nos registros de empréstimos.
+
+Esse campo permite identificar qual livro está associado a cada empréstimo.
+
+**Importante:** não existe integração com banco de dados persistente nesta versão. Ao reiniciar o servidor, os dados retornam aos registros iniciais definidos no código.
 
 ## 👥 Equipe
 
-Projeto desenvolvido como parte do **Projeto Final Integrador**.
+Projeto desenvolvido como parte do Projeto Final Integrador.
 
-> Ana Lívia Paixão | Bruno Rodrigues Garcia
-> ana.l.paixao@edu.senai.br | b.garcia@edu.senai.br
+**Integrantes:**
+
+- Ana Lívia Paixão
+- Bruno Rodrigues Garcia
+
+**Instituição:** SENAI
 
 ---
 
 <p align="center">
   Desenvolvido para fins acadêmicos.
 </p>
+
