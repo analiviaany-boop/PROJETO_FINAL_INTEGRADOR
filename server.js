@@ -12,6 +12,13 @@ let livros = [
 	{ id: 3, livro: "O Fantasma da Opera", autor: "Gaston Leroux", editora: "DarkSide Books", status: "ATRASADO" }
 ];
 
+// Banco de dados em memória - Empréstimos
+let emprestimos = [
+	{ id: 1, livroId: 2, nomeUsuario: "Sofia Maradini", dataEmprestimo: "2026-11-06", dataDevolucaoPrevista: "2026-11-20", dataDevolucao: null, status: "ATIVO" },
+	{ id: 2, livroId: 3, nomeUsuario: "Beatriz Gomes", dataEmprestimo: "2026-10-15", dataDevolucaoPrevista: "2026-10-29", dataDevolucao: null, status: "ATRASADO" },
+	{ id: 3, livroId: 1, nomeUsuario: "Sebastião Lacerda", dataEmprestimo: "2026-10-06", dataDevolucaoPrevista: "2026-10-20", dataDevolucao: "2026-10-09", status: "DEVOLVIDO" }
+];
+
 // 1. GET /api/v1/livros - Listar todos os livros (Suporta filtro por status query param)
 app.get('/api/v1/livros', (req, res) => {
 	const { status } = req.query;
@@ -109,6 +116,75 @@ app.put('/api/v1/livros/:id', (req, res) => {
 	res.status(200).json(livros[index]);
 });
 
+// 8. GET /api/v1/emprestimos - Listar todos os empréstimos
+app.get('/api/v1/emprestimos', (req, res) => {
+	const resultado = emprestimos.map( e => {
+		const livro = livros.find(l => l.id === e.livroId);
+
+		const status = e.status === "ATIVO" &&
+			new Date(e.dataDevolucaoPrevista) < new Date()
+			? "ATRASADO"
+			: e.status;
+
+		return {
+			...e,
+			status,
+			livro: livro || null
+		};
+	});
+
+	res.status(200).json(resultado);
+});
+
+// 9. GET /api/v1/emprestimos/:id - Buscar empréstimo por ID
+app.get('/api/v1/emprestimos/:id', (req, res) => {
+	const id = Number(req.params.id);
+
+	const emprestimos = emprestimos.find(e => e.id === id);
+
+	if (!emprestimo) {
+		return res.status(404).json({
+			erro: "Emprestimo nao encontrado."
+		});
+	}
+
+	const livro = livros.find(l => l.id === emprestimo.livroId);
+
+	const status = emprestimo.status === "ATIVO" &&
+		new Date(emprestimo.dataDevolucaoPrevista) < new Date()
+		? "ATRASADO"
+		: emprestimo.status;
+
+	res.status(200).json({
+		...emprestimo,
+		status,
+		livro: livro || null
+	});
+});
+
+// 10. POST /api/v1/emprestimos - Cadastrar novo empréstimo
+app.post('/api/v1/emprestimos', (req, res) => {
+	const {
+		livroId,
+		nomeUsuario,
+		dataDevolucaoPrevista
+	} = req.body;
+
+	if (!livroId || !nomeUsuario || !dataDevolucaoPrevista) {
+		return res.status(400).json({
+			erro: "Informe o livroId, nomeUsuario e dataDevolucaoPrevista."
+		});
+	}
+
+	// Procura o livro pelo ID informado
+	const livro = livros.find(l => l.id === Number(livroID));
+
+	// Verifica se o livro existe
+	if (livro.status !== "DISPONIVEL") {
+		return res.status(400).json({
+			erro: "Este livro nao esta disponivel para emprestimo."
+		});
+	}
 app.listen(PORT, () => {
 	console.log(`[BIBLIOTECH] API de Gestão de Biblioteca rodando em http://localhost:${PORT}`);
 });
