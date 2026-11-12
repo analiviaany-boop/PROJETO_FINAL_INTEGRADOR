@@ -42,7 +42,7 @@ O sistema possui duas entidades principais:
 - Atualizar informações dos empréstimos.
 - Registrar a devolução de livros.
 - Atualizar automaticamente a disponibilidade do livro após a devolução.
-- Identificar empréstimos atrasados.
+- Atualizar empréstimos ativos para atrasados.
 - Impedir empréstimos de livros indisponíveis.
 - Impedir a atualização de empréstimos já devolvidos.
 - Permitir a exclusão somente de empréstimos devolvidos.
@@ -127,6 +127,7 @@ Todas as rotas utilizam o prefixo `/api/v1`.
 | POST | `/api/v1/emprestimos` | Cadastra um novo empréstimo |
 | PUT | `/api/v1/emprestimos/:id` | Atualiza os dados de um empréstimo |
 | PATCH | `/api/v1/emprestimos/:id/devolucao` | Registra a devolução de um livro |
+| PATCH | `/api/v1/emprestimos/:id/atraso` | Registra o atraso de um livro |
 | DELETE | `/api/v1/emprestimos/:id` | Exclui um empréstimo devolvido |
 
 ### ❤️ Endpoint de monitoramento
