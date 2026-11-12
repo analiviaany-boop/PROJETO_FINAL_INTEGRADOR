@@ -1,0 +1,85 @@
+# APRESENTAÇÃO — BIBLIOTECH API
+
+## 1. Introdução — 1 minuto
+
+**Apresentador 1:**
+
+"Bom dia/boa noite! Hoje vamos apresentar nosso projeto chamado BiblioTech, uma API desenvolvida para auxiliar no gerenciamento de uma biblioteca.
+
+O objetivo do projeto é permitir o controle de livros e empréstimos por meio de requisições HTTP.
+
+Nossa API foi desenvolvida utilizando JavaScript, Node.js e Express. Ela trabalha com duas entidades principais: livros e empréstimos.
+
+Durante a apresentação, vamos demonstrar as quatro operações básicas do CRUD: cadastrar, consultar, atualizar e excluir registros."
+
+Essas operações são realizadas por meio dos métodos HTTP POST, GET, PUT e DELETE, respectivamente.
+
+
+`POST /api/v1/livros`
+
+Enviamos as informações do livro, como título, autor e editora. A API verifica se os campos obrigatórios foram preenchidos e, caso estejam corretos, cadastra o livro e gera um identificador automaticamente.
+
+Agora temos o READ, que permite consultar os livros cadastrados.
+
+Utilizamos:
+
+`GET /api/v1/livros`
+
+Essa rota retorna a lista de livros cadastrados.
+
+Também podemos consultar um livro específico pelo seu ID:
+
+`GET /api/v1/livros/1`
+
+Na operação UPDATE, utilizamos o método PUT:
+
+`PUT /api/v1/livros/1`
+
+Com ele, podemos atualizar as informações de um livro. Nesse caso, precisamos informar todos os campos obrigatórios: livro, autor, editora e status.
+
+Por último, temos o DELETE, responsável por excluir um livro:
+
+`DELETE /api/v1/livros/1`
+
+Informamos o ID do livro que queremos remover. Se ele existir, a API realiza a exclusão."
+
+**[Durante essa parte, mostrar no Postman as requisições POST, GET, PUT e DELETE.]**
+
+## 4. CRUD de Empréstimos — 3 minutos
+
+**Apresentador 2:**
+
+"Agora vamos apresentar a segunda entidade do nosso projeto: Empréstimos.
+
+Ela é responsável por registrar os empréstimos realizados pelos usuários da biblioteca.
+
+Começando pelo CREATE, utilizamos:
+
+`POST /api/v1/emprestimos`
+
+Para cadastrar um empréstimo, precisamos informar o ID do livro, o nome do usuário e a data prevista para devolução.
+
+A API verifica se o livro está disponível e se as informações obrigatórias foram preenchidas corretamente.
+
+Para consultar os empréstimos cadastrados, utilizamos:
+
+`GET /api/v1/emprestimos`
+
+Também podemos consultar um empréstimo específico pelo seu identificador:
+
+`GET /api/v1/emprestimos/1`
+
+Na operação UPDATE, utilizamos:
+
+`PUT /api/v1/emprestimos/1`
+
+Essa rota permite atualizar o nome do usuário e a data prevista para devolução. A API não permite atualizar um empréstimo que já foi devolvido.
+
+Por fim, temos o DELETE:
+
+`DELETE /api/v1/emprestimos/1`
+
+Essa operação exclui um empréstimo, mas existe uma regra importante: somente empréstimos com status DEVOLVIDO podem ser excluídos."
+
+**[Durante essa parte, mostrar no Postman as requisições de consulta, cadastro e atualização. Na exclusão, explicar a regra e, se for demonstrar, utilizar um empréstimo já devolvido.]**
+
