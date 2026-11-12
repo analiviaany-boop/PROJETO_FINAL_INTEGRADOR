@@ -339,8 +339,42 @@ app.patch('/api/v1/emprestimos/:id/devolucao', (req, res) => {
     });
 });
 
+// 13. PATCH /api/v1/emprestimos/:id/atraso - Registrar atraso do empréstimo
+app.patch('/api/v1/emprestimos/:id/atraso', (req, res) => {
+    const id = Number(req.params.id);
 
-// 13. DELETE /api/v1/emprestimos/:id - Excluir empréstimo
+    const emprestimo = emprestimos.find(e => e.id === id);
+
+    if (!emprestimo) {
+        return res.status(404).json({
+            erro: "Emprestimo nao encontrado."
+        });
+    }
+
+    if (emprestimo.status === "DEVOLVIDO") {
+        return res.status(400).json({
+            erro: "Este livro ja foi devolvido."
+        });
+    }
+
+    // Atualiza o status do empréstimo para ATRASADO
+    emprestimo.status = "ATRASADO";
+
+    // Procura o livro relacionado pelo livroId e atualiza o status automaticamente
+    const livro = livros.find(l => l.id === emprestimo.livroId);
+
+    if (livro) {
+        livro.status = "ATRASADO";
+    }
+
+    res.status(200).json({
+        mensagem: "Atraso registrado com sucesso!",
+        emprestimo,
+        livro: livro || null
+    });
+});
+
+// 14. DELETE /api/v1/emprestimos/:id - Excluir empréstimo
 app.delete('/api/v1/emprestimos/:id', (req, res) => {
     const id = Number(req.params.id);
 
