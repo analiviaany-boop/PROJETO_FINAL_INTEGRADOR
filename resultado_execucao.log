@@ -1,0 +1,305 @@
+=========================================
+ INICIANDO TESTES DE AUTOMACAO
+ BIBLIOTECH API - sex 27 nov 2026 12:49:07 -03
+=========================================
+
+========== TESTES DE LIVROS ==========
+
+[1] POST - Cadastrando Livro de Teste...
+{
+  "id": 4,
+  "livro": "Livro de Teste",
+  "autor": "Autor Teste",
+  "editora": "Editora Teste",
+  "status": "DISPONIVEL"
+}
+
+[2] GET - Consultando livro cadastrado...
+{
+  "id": 4,
+  "livro": "Livro de Teste",
+  "autor": "Autor Teste",
+  "editora": "Editora Teste",
+  "status": "DISPONIVEL"
+}
+
+[3] PUT - Atualizando livro...
+{
+  "id": 4,
+  "livro": "Livro de Teste Atualizado",
+  "autor": "Autor Teste",
+  "editora": "Editora Teste",
+  "status": "DISPONIVEL"
+}
+
+[4] GET - Listando todos os livros...
+[
+  {
+    "id": 1,
+    "livro": "O Pequeno Principe",
+    "autor": "Antoine de Saint-Exupery",
+    "editora": "Editora Rocco",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 2,
+    "livro": "Harry Potter e o Calice de Fogo",
+    "autor": "J. K. Rowling",
+    "editora": "Editora Rocco",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 3,
+    "livro": "O Fantasma da Opera",
+    "autor": "Gaston Leroux",
+    "editora": "DarkSide Books",
+    "status": "ATRASADO"
+  },
+  {
+    "id": 4,
+    "livro": "Livro de Teste Atualizado",
+    "autor": "Autor Teste",
+    "editora": "Editora Teste",
+    "status": "ATRASADO"
+  }
+]
+
+[5] PATCH - Atualizando status do livro...
+{
+  "mensagem": "Status atualizado com sucesso!",
+  "livro": {
+    "id": 4,
+    "livro": "Livro de Teste Atualizado",
+    "autor": "Autor Teste",
+    "editora": "Editora Teste",
+    "status": "DISPONIVEL"
+  }
+}
+
+========== TESTES DE EMPRESTIMOS ==========
+
+[6] GET - Listando todos os empréstimos...
+[
+  {
+    "id": 2,
+    "livroId": 3,
+    "nomeUsuario": "Beatriz Gomes",
+    "dataEmprestimo": "2026-10-15",
+    "dataDevolucaoPrevista": "2026-10-29",
+    "dataDevolucao": null,
+    "status": "ATRASADO",
+    "livro": {
+      "id": 3,
+      "livro": "O Fantasma da Opera",
+      "autor": "Gaston Leroux",
+      "editora": "DarkSide Books",
+      "status": "ATRASADO"
+    }
+  },
+  {
+    "id": 4,
+    "livroId": 4,
+    "nomeUsuario": "Bruno Garcia",
+    "dataEmprestimo": "2026-11-12T16:19:32.818Z",
+    "dataDevolucaoPrevista": "2026-12-18",
+    "dataDevolucao": null,
+    "status": "ATRASADO",
+    "livro": {
+      "id": 4,
+      "livro": "Livro de Teste Atualizado",
+      "autor": "Autor Teste",
+      "editora": "Editora Teste",
+      "status": "DISPONIVEL"
+    }
+  }
+]
+
+[7] POST - Cadastrando novo empréstimo...
+{
+  "mensagem": "Emprestimo cadastrado com sucesso!",
+  "emprestimo": {
+    "id": 5,
+    "livroId": 4,
+    "nomeUsuario": "Usuario Teste",
+    "dataEmprestimo": "2026-11-27T15:49:07.463Z",
+    "dataDevolucaoPrevista": "2026-12-27",
+    "dataDevolucao": null,
+    "status": "ATIVO"
+  },
+  "livro": {
+    "id": 4,
+    "livro": "Livro de Teste Atualizado",
+    "autor": "Autor Teste",
+    "editora": "Editora Teste",
+    "status": "EMPRESTADO"
+  }
+}
+
+[8] GET - Consultando empréstimo por ID...
+{
+  "id": 5,
+  "livroId": 4,
+  "nomeUsuario": "Usuario Teste",
+  "dataEmprestimo": "2026-11-27T15:49:07.463Z",
+  "dataDevolucaoPrevista": "2026-12-27",
+  "dataDevolucao": null,
+  "status": "ATIVO",
+  "livro": {
+    "id": 4,
+    "livro": "Livro de Teste Atualizado",
+    "autor": "Autor Teste",
+    "editora": "Editora Teste",
+    "status": "EMPRESTADO"
+  }
+}
+
+[9] PUT - Atualizando dados do empréstimo...
+{
+  "mensagem": "Emprestimo atualizado com sucesso!",
+  "emprestimo": {
+    "id": 5,
+    "livroId": 4,
+    "nomeUsuario": "Usuario Atualizado",
+    "dataEmprestimo": "2026-11-27T15:49:07.463Z",
+    "dataDevolucaoPrevista": "2027-01-11",
+    "dataDevolucao": null,
+    "status": "ATIVO"
+  }
+}
+
+[10] GET - Verificando se o livro está emprestado...
+{
+  "id": 4,
+  "livro": "Livro de Teste Atualizado",
+  "autor": "Autor Teste",
+  "editora": "Editora Teste",
+  "status": "EMPRESTADO"
+}
+
+[11] PATCH - Registrando devolução do livro...
+{
+  "mensagem": "Devolucao registrada com sucesso!",
+  "emprestimo": {
+    "id": 5,
+    "livroId": 4,
+    "nomeUsuario": "Usuario Atualizado",
+    "dataEmprestimo": "2026-11-27T15:49:07.463Z",
+    "dataDevolucaoPrevista": "2027-01-11",
+    "dataDevolucao": "2026-11-27T15:49:07.496Z",
+    "status": "DEVOLVIDO"
+  },
+  "livro": {
+    "id": 4,
+    "livro": "Livro de Teste Atualizado",
+    "autor": "Autor Teste",
+    "editora": "Editora Teste",
+    "status": "DISPONIVEL"
+  }
+}
+
+[12] GET - Consultando empréstimo após devolução...
+{
+  "id": 5,
+  "livroId": 4,
+  "nomeUsuario": "Usuario Atualizado",
+  "dataEmprestimo": "2026-11-27T15:49:07.463Z",
+  "dataDevolucaoPrevista": "2027-01-11",
+  "dataDevolucao": "2026-11-27T15:49:07.496Z",
+  "status": "DEVOLVIDO",
+  "livro": {
+    "id": 4,
+    "livro": "Livro de Teste Atualizado",
+    "autor": "Autor Teste",
+    "editora": "Editora Teste",
+    "status": "DISPONIVEL"
+  }
+}
+
+[13] GET - Verificando se o livro voltou a ficar disponível...
+{
+  "id": 4,
+  "livro": "Livro de Teste Atualizado",
+  "autor": "Autor Teste",
+  "editora": "Editora Teste",
+  "status": "DISPONIVEL"
+}
+
+[14] PATCH - Tentando registrar uma segunda devolução...
+{
+  "erro": "Este livro ja foi devolvido."
+}
+
+[15] DELETE - Excluindo empréstimo devolvido...
+{
+  "mensagem": "Emprestimo excluido com sucesso!"
+}
+
+[16] GET - Listando empréstimos após exclusão...
+[
+  {
+    "id": 2,
+    "livroId": 3,
+    "nomeUsuario": "Beatriz Gomes",
+    "dataEmprestimo": "2026-10-15",
+    "dataDevolucaoPrevista": "2026-10-29",
+    "dataDevolucao": null,
+    "status": "ATRASADO",
+    "livro": {
+      "id": 3,
+      "livro": "O Fantasma da Opera",
+      "autor": "Gaston Leroux",
+      "editora": "DarkSide Books",
+      "status": "ATRASADO"
+    }
+  },
+  {
+    "id": 4,
+    "livroId": 4,
+    "nomeUsuario": "Bruno Garcia",
+    "dataEmprestimo": "2026-11-12T16:19:32.818Z",
+    "dataDevolucaoPrevista": "2026-12-18",
+    "dataDevolucao": null,
+    "status": "ATRASADO",
+    "livro": {
+      "id": 4,
+      "livro": "Livro de Teste Atualizado",
+      "autor": "Autor Teste",
+      "editora": "Editora Teste",
+      "status": "DISPONIVEL"
+    }
+  }
+]
+
+[17] DELETE - Removendo livro de teste...
+{
+  "mensagem": "Livro ID ${id} removido com sucesso."
+}
+
+[18] GET - Listando acervo final de livros...
+[
+  {
+    "id": 1,
+    "livro": "O Pequeno Principe",
+    "autor": "Antoine de Saint-Exupery",
+    "editora": "Editora Rocco",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 2,
+    "livro": "Harry Potter e o Calice de Fogo",
+    "autor": "J. K. Rowling",
+    "editora": "Editora Rocco",
+    "status": "DISPONIVEL"
+  },
+  {
+    "id": 3,
+    "livro": "O Fantasma da Opera",
+    "autor": "Gaston Leroux",
+    "editora": "DarkSide Books",
+    "status": "ATRASADO"
+  }
+]
+
+=========================================
+ TESTES DE AUTOMACAO FINALIZADOS!
+=========================================
