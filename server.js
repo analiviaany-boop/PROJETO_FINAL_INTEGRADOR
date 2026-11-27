@@ -537,6 +537,45 @@ app.delete('/api/v1/emprestimos/:id', (req, res) => {
 });
 
 
+// [FLUXO] Rota de dashboard com informações analíticas da biblioteca
+app.get('/api/v1/dashboard', (req, res) => {
+
+    // [TRANSF] Inicializa os contadores dos livros
+    const livrosPorStatus = {};
+    
+    // [TRANSF] Conta a quantidade de livros por status
+    livros.forEach((livro) => {
+        const status = String(livro.status || 'SEM_STATUS').toUpperCase();
+
+        livrosPorStatus[status] = (livrosPorStatus[status] || 0) + 1;
+    });
+
+    // [TRANSF] Inicializa os contadores dos empréstimos
+    const emprestimosPorStatus = {};
+
+    // [TRANSF] Conta a quantidade de empréstimos por status
+    emprestimos.forEach((emprestimo) => {
+        const status = String(
+            emprestimo.status || 'SEM_STATUS'
+        ).toUpperCase();
+
+        emprestimosPorStatus[status] =
+            (emprestimosPorStatus[status] || 0) + 1;
+    });
+
+    // [FLUXO] Monta os dados que serão enviados ao cliente
+    const dashboard = {
+        totalLivros: livros.length,
+        livrosPorStatus: livrosPorStatus,
+
+        totalEmprestimos: emprestimos.length,
+        emprestimosPorStatus: emprestimosPorStatus
+    };
+
+    // [FLUXO] Retorna os dados em formato JSON
+    res.status(200).json(dashboard);
+});
+
 // [FLUXO] Inicia o servidor e disponibiliza a API na porta configurada.
 app.listen(PORT, () => {
     console.log(`[BIBLIOTECH] API de Gestão de Biblioteca rodando em http://localhost:${PORT}`);
